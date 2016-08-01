@@ -1,0 +1,58 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "a0cb0ca48ebc9e80f4f79f029844d65c",
+    "content-hash": "75a708db485f514f2c828486cc67ff94",
+    "packages": [
+        {
+            "name": "dbstudios/php-commons",
+            "version": "4.8.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LartTyler/PHP-DaybreakCommons.git",
+                "reference": "db25b5d6cea9b5a1d5afc4c5548a2cbc3018bc0d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LartTyler/PHP-DaybreakCommons/zipball/db25b5d6cea9b5a1d5afc4c5548a2cbc3018bc0d",
+                "reference": "db25b5d6cea9b5a1d5afc4c5548a2cbc3018bc0d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">= 5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.4.*"
+            },
+            "suggest": {
+                "symfony/yaml": "Required if you plan on using the Localization and / or Yaml suites"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "DaybreakStudios\\": "src/DaybreakStudios"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Tyler Lartonoix",
+                    "email": "overlordcodemonkey@live.com"
+                }
+            ],
+            "description": "A collection of common PHP files that are used between many projects",
+            "time": "2016-01-08 17:13:18"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
