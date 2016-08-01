@@ -14,27 +14,33 @@
 
 		/**
 		 * @param string               $title    the page title (displayed in the menu bar)
-		 * @param string               $pageName the filename to load from the "pages" directory
-		 * @param PageType|string|null $pageType the capability level required by the page
+		 * @param string               $page     the filename to load from the "pages" directory
+		 * @param PageType|string|null $type     the capability level required by the page
 		 * @param string               $hook     the name of the hook to add the page action to
 		 * @param string|null          $plug     the page plug (if not provided, it will be the page title with all
 		 *                                       spaces converted to dashes)
+		 * @param \Closure|null        $callback an optional callback that can be used to enqueue stylesheets, scripts,
+		 *                                       or perform any other operation, when the hook is called (executes
+		 *                                       BEFORE `add_menu_page` is called)
 		 */
-		public function addMenuPage($title, $pageName, $pageType = null, $hook = 'admin_menu', $plug = null) {
-			if ($pageType === null)
-				$pageType = PageType::OPTIONS();
+		public function addMenuPage($title, $page, $type = null, $hook = 'admin_menu', $plug = null, \Closure $callback = null) {
+			if ($type === null)
+				$type = PageType::OPTIONS();
 
-			if ($pageType instanceof PageType)
-				$pageType = $pageType->getCapability();
+			if ($type instanceof PageType)
+				$type = $type->getCapability();
 
 			if ($plug === null)
 				$plug = strtolower(str_replace(' ', '-', $title));
 
 			$self = $this;
 
-			add_action($hook, function() use ($title, $pageType, $plug, $self, $pageName) {
-				add_menu_page($title, $title, $pageType, $plug, function() use ($self, $pageName) {
-					echo $self->getPage($pageName);
+			add_action($hook, function() use ($title, $type, $plug, $self, $page, $callback) {
+				if ($callback !== null)
+					call_user_func($callback, $self);
+
+				add_menu_page($title, $title, $type, $plug, function() use ($self, $page) {
+					echo $self->getPage($page);
 				});
 			});
 		}
