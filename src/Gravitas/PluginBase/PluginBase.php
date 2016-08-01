@@ -8,9 +8,55 @@
 
 		private static $instance = null;
 
+		/**
+		 * @var string
+		 */
+		protected $optPrefix = '';
+
 		private $pageCache = array();
 
 		abstract function run();
+
+		/**
+		 * @return string
+		 */
+		public function getOptionPrefix() {
+			return $this->optPrefix;
+		}
+
+		/**
+		 * @param string $prefix
+		 *
+		 * @return $this
+		 */
+		protected function setOptionPrefix($prefix) {
+			$this->optPrefix = $prefix;
+
+			return $this;
+		}
+
+		/**
+		 * @param string     $name
+		 * @param mixed|null $def
+		 *
+		 * @return mixed
+		 */
+		public function getOption($name, $def = null) {
+			return get_option($this->getOptionPrefix() . $name, $def);
+		}
+
+		/**
+		 * @param string $name
+		 * @param mixed  $value
+		 * @param bool   $autoload
+		 *
+		 * @return $this
+		 */
+		public function setOption($name, $value, $autoload = true) {
+			update_option($this->getOptionPrefix() . $name, $value, $autoload);
+
+			return $this;
+		}
 
 		/**
 		 * @param string               $title    the page title (displayed in the menu bar)
