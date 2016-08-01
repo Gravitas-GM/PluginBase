@@ -59,22 +59,19 @@
 		}
 
 		/**
-		 * @param string               $title    the page title (displayed in the menu bar)
-		 * @param string               $page     the filename to load from the "pages" directory
-		 * @param PageType|string|null $type     the capability level required by the page
-		 * @param string               $hook     the name of the hook to add the page action to
-		 * @param string|null          $plug     the page plug (if not provided, it will be the page title with all
+		 * @param string        $title           the page title (displayed in the menu bar)
+		 * @param string        $page            the filename to load from the "pages" directory
+		 * @param string|null   $type            the capability level required by the page
+		 * @param string        $hook            the name of the hook to add the page action to
+		 * @param string|null   $plug            the page plug (if not provided, it will be the page title with all
 		 *                                       spaces converted to dashes)
-		 * @param \Closure|null        $callback an optional callback that can be used to enqueue stylesheets, scripts,
+		 * @param \Closure|null $callback        an optional callback that can be used to enqueue stylesheets, scripts,
 		 *                                       or perform any other operation, when the hook is called (executes
 		 *                                       BEFORE `add_menu_page` is called)
 		 */
 		public function addMenuPage($title, $page, $type = null, $hook = 'admin_menu', $plug = null, \Closure $callback = null) {
 			if ($type === null)
-				$type = PageType::OPTIONS();
-
-			if ($type instanceof PageType)
-				$type = $type->getCapability();
+				$type = PageType::OPTIONS;
 
 			if ($plug === null)
 				$plug = strtolower(str_replace(' ', '-', $title));
@@ -116,12 +113,12 @@
 		}
 
 		/**
-		 * @param NoticeLevel $level
-		 * @param string      $message
+		 * @param string $level
+		 * @param string $message
 		 *
 		 * @return $this
 		 */
-		public function addNotice(NoticeLevel $level, $message) {
+		public function addNotice($level, $message) {
 			add_action('admin_notices', function() use ($level, $message) {
 				printf('<div class="%1$s"><p>%2$s</p></div>', $level, $message);
 			});
