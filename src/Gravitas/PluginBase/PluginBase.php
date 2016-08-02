@@ -158,6 +158,37 @@
 		}
 
 		/**
+		 * @param string $name
+		 * @param string $src
+		 * @param array  $depends
+		 * @param bool   $version
+		 * @param bool   $footer
+		 *
+		 * @return string
+		 */
+		public function addStylesheet($name, $src, array $depends = array(), $version = false, $footer = false) {
+			wp_enqueue_style($name, $src, $depends, $version, $footer);
+
+			return $name;
+		}
+
+		/**
+		 * @param string $name
+		 * @param string $src
+		 * @param array  $depends
+		 * @param bool   $version
+		 * @param bool   $footer
+		 *
+		 * @return string
+		 */
+		public function addLocalStylesheet($name, $src, array $depends = array(), $version = false, $footer = false) {
+			$n = $this->getOptionPrefix() . $name;
+			$s = $this->getPluginUrlRoot() . $src;
+
+			return $this->addStylesheet($n, $s, $depends, $version, $footer);
+		}
+
+		/**
 		 * @return string
 		 */
 		public function getPluginRoot() {
