@@ -127,6 +127,37 @@
 		}
 
 		/**
+		 * @param string $name
+		 * @param string $src
+		 * @param array  $depends
+		 * @param bool   $version
+		 * @param bool   $footer
+		 *
+		 * @return string
+		 */
+		public function addScript($name, $src, array $depends = array(), $version = false, $footer = false) {
+			wp_enqueue_script($name, $src, $depends, $version, $footer);
+
+			return $name;
+		}
+
+		/**
+		 * @param string $name
+		 * @param string $src
+		 * @param array  $depends
+		 * @param bool   $version
+		 * @param bool   $footer
+		 *
+		 * @return string
+		 */
+		public function addLocalScript($name, $src, array $depends = array(), $version = false, $footer = false) {
+			$n = $this->getOptionPrefix() . $name;
+			$s = $this->getPluginUrlRoot() . $src;
+
+			return $this->addScript($n, $s, $depends, $version, $footer);
+		}
+
+		/**
 		 * @return string
 		 */
 		public function getPluginRoot() {
@@ -146,10 +177,14 @@
 		}
 
 		public function serialize() {
-			return serialize(array());
+			return serialize(array(
+				$this->getOptionPrefix(),
+			));
 		}
 
 		public function unserialize($data) {
+			list($this->optPrefix) = unserialize($data);
+
 			self::$instance = $this;
 		}
 
