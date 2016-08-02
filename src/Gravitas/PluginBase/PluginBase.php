@@ -8,12 +8,18 @@
 
 		private static $instance = null;
 
+		private $resourceChain;
+
 		/**
 		 * @var string
 		 */
 		protected $optPrefix = '';
 
 		private $pageCache = array();
+
+		public function __construct() {
+			$this->resourceChain = new ResourceChain($this);
+		}
 
 		abstract function run();
 
@@ -124,6 +130,18 @@
 			});
 
 			return $this;
+		}
+
+		/**
+		 * Returns a ResourceChain object that can be used to add stylesheets and scripts.
+		 *
+		 * Functionally, this is the same as calling `add*Script` and `add*Stylesheet` methods, except that it
+		 * automatically registers all previously registered resources (added via the ResourceChain) as dependencies.
+		 *
+		 * @return ResourceChain
+		 */
+		public function addResources() {
+			return $this->resourceChain;
 		}
 
 		/**
