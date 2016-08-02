@@ -8,18 +8,13 @@
 
 		private static $instance = null;
 
-		private $resourceChain;
-
 		/**
 		 * @var string
 		 */
 		protected $optPrefix = '';
 
+		private $resourceChain = null;
 		private $pageCache = array();
-
-		public function __construct() {
-			$this->resourceChain = new ResourceChain($this);
-		}
 
 		abstract function run();
 
@@ -141,6 +136,9 @@
 		 * @return ResourceChain
 		 */
 		public function addResources() {
+			if ($this->resourceChain === null)
+				$this->resourceChain = new ResourceChain($this);
+
 			return $this->resourceChain;
 		}
 
