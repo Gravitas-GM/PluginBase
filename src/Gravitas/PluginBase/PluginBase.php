@@ -1,9 +1,7 @@
 <?php
 	namespace Gravitas\PluginBase;
 
-	use \Serializable;
-
-	abstract class PluginBase implements Serializable {
+	abstract class PluginBase implements \Serializable {
 		const PLUGIN_ROOT_SEARCH_LEN = 18;
 
 		private static $instance = null;
@@ -13,10 +11,38 @@
 		 */
 		protected $optPrefix = '';
 
+		/**
+		 * @var ResourceChain|null
+		 */
 		private $resourceChain = null;
+
+		/**
+		 * @var array
+		 */
 		private $pageCache = array();
 
-		abstract function run();
+		/**
+		 * @var callable[]
+		 */
+		private $formHandlers = array();
+
+		/**
+		 * Used to register pages, form handlers, etc. Any custom code that needs to run with your plugin belongs in
+		 * here.
+		 *
+		 * By default, this method is a no-op, so there is no need to make a parent call when overriding it.
+		 */
+		public function execute() {}
+
+		/**
+		 * The entry point for a plugin. This should be called immediately in your bootstrap file.
+		 */
+		public function run() {
+			$this->execute();
+
+			if ($handler = $this->getFormHandler(@$_REQUEST['_form_name']))
+				call_user_func($handler, $_REQUEST);
+		}
 
 		/**
 		 * @return string
@@ -202,6 +228,47 @@
 			$s = $this->getPluginUrlRoot() . $src;
 
 			return $this->addStylesheet($n, $s, $depends, $version, $footer);
+		}
+
+		/**
+		 * @param string   $formName
+		 * @param callable $handler
+		 *
+		 * @return $this
+		 */
+		public function addFormHandler($formName, callable $handler) {
+			$this->formHandlers[$formName] = $handler;
+
+			return $this;
+		}
+
+		/**
+		 * @param string $formName
+		 *
+		 * @return callable|null
+		 */
+		public function getFormHandler($formName) {
+			return @$this->formHandlers[$formName] ?: null;
+		}
+
+		/**
+		 * @param string $formName
+		 *
+		 * @return bool
+		 */
+		public function hasFormHandler($formName) {
+			return $this->getFormHandler($formName) !== null;
+		}
+
+		/**
+		 * @param string $formName
+		 *
+		 * @return $this
+		 */
+		public function removeFormHandler($formName) {
+			unset($this->formHandlers[$formName]);
+
+			return $this;
 		}
 
 		/**
