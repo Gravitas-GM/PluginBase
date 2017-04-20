@@ -32,7 +32,8 @@
 		 *
 		 * By default, this method is a no-op, so there is no need to make a parent call when overriding it.
 		 */
-		public function execute() {}
+		public function execute() {
+		}
 
 		/**
 		 * The entry point for a plugin. This should be called immediately in your bootstrap file.
@@ -267,6 +268,24 @@
 		 */
 		public function removeFormHandler($formName) {
 			unset($this->formHandlers[$formName]);
+
+			return $this;
+		}
+
+		/**
+		 * Registers a new custom action that can be invoked using the `/wp-admin/admin-ajax.php?action=$name` endpoint.
+		 *
+		 * @param string   $name     the name of the action
+		 * @param callable $callback the function or method to call
+		 * @param bool     $noPriv   if true, will also define the unprivileged action to call the same callback
+		 *
+		 * @return $this
+		 */
+		public function addAjaxAction($name, callable $callback, $noPriv = false) {
+			add_action('wp_ajax_' . $name, $callback);
+
+			if ($noPriv)
+				add_action('wp_ajax_nopriv_' . $name, $callback);
 
 			return $this;
 		}
