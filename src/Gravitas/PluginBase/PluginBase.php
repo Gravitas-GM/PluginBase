@@ -236,8 +236,13 @@
 		 * @param callable $handler
 		 *
 		 * @return $this
+		 * @throws \Exception
 		 */
-		public function addFormHandler($formName, callable $handler) {
+		public function addFormHandler($formName, $handler) {
+			if (!is_callable($handler))
+				throw new \Exception('$handler must be a callable, ' .
+					(is_object($handler) ? get_class($handler) : gettype($handler)) . 'given');
+
 			$this->formHandlers[$formName] = $handler;
 
 			return $this;
