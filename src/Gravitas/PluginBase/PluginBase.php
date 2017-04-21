@@ -280,8 +280,13 @@
 		 * @param bool     $noPriv   if true, will also define the unprivileged action to call the same callback
 		 *
 		 * @return $this
+		 * @throws \Exception
 		 */
-		public function addAjaxAction($name, callable $callback, $noPriv = false) {
+		public function addAjaxAction($name, $callback, $noPriv = false) {
+			if (!is_callable($callback))
+				throw new \Exception('$callback must be a callable, ' .
+					(is_object($callback) ? get_class($callback) : gettype($callback)) . ' given');
+
 			add_action('wp_ajax_' . $name, $callback);
 
 			if ($noPriv)
